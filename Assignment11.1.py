@@ -17,17 +17,25 @@ from bs4 import BeautifulSoup
 import urllib
 from collections import Counter
 import nltk
-
-response = urllib.request.urlopen('http://php.net/')
-html = response.read()
-soup = BeautifulSoup(html,"html5lib")
- 
-text = soup.get_text(strip=True)
-
-
-tokens = [t for t in text.split()]
-Counter(tokens)
-freq = nltk.FreqDist(tokens)
- 
-for key,val in Counter(tokens).items():
-    print (str(key) + ':' + str(val))
+try:
+    #Get data from url 'http://php.net/'
+    response = urllib.request.urlopen('http://php.net/')
+    html = response.read()
+    soup = BeautifulSoup(html,"html5lib")
+     
+    #Extract the text from web page
+    text = soup.get_text(strip=True)
+    
+    #Split the text using space
+    tokens = [t for t in text.split()]
+    
+    #COunt the frequecncy of word
+    freq = nltk.FreqDist(tokens)
+    
+    #To write the output into text file
+    with open('result.txt','w') as f:
+        for key,val in freq.items():
+            f.write(str(key) + ':' + str(val)+'\n')
+            
+except Exception as e:
+    print(e)
